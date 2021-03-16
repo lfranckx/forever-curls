@@ -1,0 +1,247 @@
+{% capture email_title %}
+    {% if billing_address.first_name %}
+        Hey {{ billing_address.first_name }}, Leysa here—
+        {% else %}
+            Hey, Leysa here—
+    {% endif %}        
+{% endcapture %}
+
+{% capture email_body %}
+    I'm happy to see you are thinking about learning through my available courses and future events, but noticed there was something holding you back.  I'd like to know why you didn't go through with your purchase so I can try and get it right, just reply to this email with your feedback. If you've changed your mind you can still make your purchase.
+    You can use this one-time discount code at checkout for 20% off of your entire purchase!
+    <br/><br/>
+    <h2>FOREVER20</h2>
+    <br/>
+    Sincerely,<br/>
+    Leysa Carillo
+{% endcapture %}
+
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <title>Your shopping cart is waiting for you...</title>
+        <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+        <meta name="viewport" content="width=device-width">
+        <link rel="stylesheet" type="text/css" href="/assets/notifications/styles.css">
+        <style>
+            .button__cell { background: {{ shop.email_accent_color }}; }
+            a, a:hover, a:active, a:visited { color: {{ shop.email_accent_color }}; }
+        </style>
+    </head>
+
+<body>
+    <table class="body">
+        <tr>
+            <td>
+                <!-- Logo Header -->
+                <table class="header row">
+                    <tr>
+                        <td class="header__cell">
+                            <center>
+
+                            <table class="container">
+                            <tr>
+                                <td>
+
+                                <table class="row">
+                                    <tr>
+                                    <td class="shop-name__cell">
+                                        {%- if shop.email_logo_url %}
+                                        <img src="{{shop.email_logo_url}}" alt="{{ shop.name }}" width="{{ shop.email_logo_width }}">
+                                        {%- else %}
+                                        <h1 class="shop-name__text">
+                                            <a href="{{shop.url}}">{{ shop.name }}</a>
+                                        </h1>
+                                        {%- endif %}
+                                    </td>
+
+                                    </tr>
+                                </table>
+
+                                </td>
+                            </tr>
+                            </table>
+                            
+                        </center>
+                        </td>
+                    </tr>
+                </table>
+            <br/>
+
+            <!-- Email Body Message and Cart -->
+            <table class="row content">
+                <tr>
+                    <td class="content__cell">
+                    <center>
+                        <table class="container">
+                            <tr>
+                                <td>
+                                    <h2>{{ email_title }}</h2>
+                                    <br />
+
+                                    {% if custom_message != blank %}
+                                    <p>{{ custom_message }}</p>
+                                    {% else %}
+                                    <p>{{ email_body }}</p>
+                                    {% endif %}
+
+                                    <table class="row section">
+                                        <tr>
+                                            <td class="section__cell">
+                                            <center>
+                                                <table class="container">
+                                                    <tr>
+                                                        <td>
+                                                        <h3 class="text-center">Here's what I have set saved for you</h3>
+                                                        </td>
+                                                    </tr>
+                                                </table>
+                                            <table class="container">
+                                            <tr>
+                                            <td>   
+                                                <table class="row">
+                                                    {% for line in subtotal_line_items %}
+                                                    <tr class="order-list__item">
+                                                        <td class="order-list__item__cell">
+                                                        <table>
+                                                            <td>
+                                                            {% if line.image %}
+                                                                <img src="{{ line | img_url: 'compact_cropped' }}" align="left" width="60" height="60" class="order-list__product-image"/>
+                                                            {% endif %}
+                                                            </td>
+                                                            <td class="order-list__product-description-cell">
+                                                            {% if line.product.title %}	
+                                                                {% assign line_title = line.product.title %}	
+                                                            {% else %}	
+                                                                {% assign line_title = line.title %}	
+                                                            {% endif %}
+                            
+                                                            {% if line.quantity < line.quantity %}
+                                                                {% capture line_display %} {{ line.quantity }} of {{ line.quantity }} {% endcapture %}
+                                                            {% else %}
+                                                                {% assign line_display = line.quantity  %}
+                                                            {% endif %}
+                            
+                                                            <span class="order-list__item-title">{{ line_title }} × {{ line_display }}</span><br/>
+                            
+                                                            {% if line.variant.title != 'Default Title' %}
+                                                                <span class="order-list__item-variant">{{ line.variant.title }}</span><br/>
+                                                            {% endif %}
+                            
+                                                            {% if line.selling_plan_allocation %}
+                                                                <span class="order-list__item-variant">{{ line.selling_plan_allocation.selling_plan.name }}</span><br/>
+                                                            {% endif %}
+                            
+                                                            {% if line.refunded_quantity > 0 %}
+                                                                <span class="order-list__item-refunded">Refunded</span>
+                                                            {% endif %}
+                            
+                                                            {% if line.discount_allocations %}
+                                                                {% for discount_allocation in line.discount_allocations %}
+                                                                {% if discount_allocation.discount_application.target_selection != 'all' %}
+                                                                    <span class="order-list__item-discount-allocation">
+                                                                    <img src="{{ 'notifications/discounttag.png' | shopify_asset_url }}" width="18" height="18" class="discount-tag-icon" />
+                                                                    <span>
+                                                                        {{ discount_allocation.discount_application.title | upcase }}
+                                                                        (-{{ discount_allocation.amount | money }})
+                                                                    </span>
+                                                                    </span>
+                                                                {% endif %}
+                                                                {% endfor %}
+                                                            {% endif %}
+                                                            </td>
+                                                        </table>
+                                                    </td>
+                                                    </tr>{% endfor %}
+                                                </table>
+                            
+                            
+                                                    </td>
+                                                </tr>
+                                                </table>
+                                            </center>
+                                            </td>
+                                        </tr>
+                                    </table>
+
+                                    <table class="row actions">
+                                        <tr>
+                                            <td class="empty-line"> </td>
+                                        </tr>
+                                        <tr>
+                                            <td class="actions__cell">
+                                                <table class="button main-action-cell">
+                                                    <tr>
+                                                    <td class="button__cell"><a href="{{ url }}" class="button__text">View Your Cart</a></td>
+                                                    </tr>
+                                                </table>
+                                                {% if shop.url %}
+                                                <table class="link secondary-action-cell">
+                                                    <tr>
+                                                        <td class="link__cell">or <a href="{{ shop.url }}">Visit our store</a></td>
+                                                    </tr>
+                                                </table>
+                                            {% endif %}
+                                            </td>
+                                        </tr>
+                                    </table>
+
+                                </td>
+                            </tr>
+                        </table>
+                    </center>
+
+                    </td>
+                </tr>
+            </table>
+
+            <!-- Learn About Me Section -->
+            <table class="row content">
+                <tr>
+                    <td class="content__cell">
+                    <center>
+                        <table class="container">
+                        <tr>
+                            <td>
+                                <a href="https://www.forevercurlsbyleysa.com/about-1" style="text-align: center;">
+                                    <h3>Learn more about me</h3>
+                                    <img 
+                                        style="max-width: 100%;"
+                                        src="https://forever-curls.s3-us-west-1.amazonaws.com/leysa%2Bclass.jpg" 
+                                        alt="leysa-class" />
+                                </a>
+                            </td>
+                        </tr>
+                        </table>
+                    </center>
+                    </td>
+                </tr>
+            </table>
+
+            <table class="row footer">
+                <tr>
+                    <td class="footer__cell">
+                    <center>
+                        <table class="container">
+                        <tr>
+                            <td>
+                                <p class="disclaimer__subtext">Have any questions? <a href='https://forever-curls.myshopify.com/pages/contact' target="_blank">Message Me</a></p>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td>
+                            <p class="disclaimer__subtext unsubscribe">Don't want to receive cart reminders? <a href="{{ unsubscribe_url }}">Unsubscribe</a></p>
+                            </td>
+                        </tr>
+                        </table>
+                    </center>
+                    </td>
+                </tr>
+            </table>
+
+        <img src="{{ 'notifications/spacer.png' | shopify_asset_url }}" class="spacer" height="1" />
+        </td>
+        </tr>
+    </table>
+  </body>
+</html>
