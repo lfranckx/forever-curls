@@ -6608,7 +6608,9 @@
                     
                       .product {
                           position: relative;
-                          background-color: #f5d1c3;
+  /*                         background-color: #f0bc68; */
+  /*                       	background: #7dbbc7; */
+                            background: #789EA3;
                           overflow: hidden;
                             max-width: 400px;
   
@@ -6643,7 +6645,12 @@
                               display: block;
                           }
                         
-                            .product-text {
+                          &:hover .product-text {
+                            opacity: 1;
+                            transform: translateY(0);
+                          }
+                        
+                          .product-text {
                               position: absolute;
                               top: 0;
                               left: 0;
@@ -6656,16 +6663,57 @@
                               transform: translateY(-20%);
                               transition: opacity 500ms cubic-bezier(0.2, 1, 0.3, 1),
                               transform 500ms cubic-bezier(0.2, 1);
-                              transition-delay: 300ms
+                              transition-delay: 300ms;
+                            
+                               .text-wrap {
+                                  position: absolute;
+                                  width: 100%;
+                                  top: 50%;
+                                  transform: translateY(-50%);
+                                  padding: 10px;
                                 
-                                .text-wrap {
-                                        position: absolute;
-                                      width: 100%;
-                                      top: 50%;
-                                      transform: translateY(-50%);
-                                      padding: 20px;
-                                }
+                                  p {
+                                    display: none;
+                                    
+                                    &:first-child {
+                                        display: block;
+                                    }
+                                  }
                                 
+                                .price {
+                                  display: flex;
+                                  justify-content: center;
+                                  
+                                  
+                                  .price-item {
+                                    line-height: 1;
+                                    font-family: "Geometric 415", sans-serif;
+                                    font-style: normal;
+                                    font-weight: 400;
+                                    text-transform: uppercase;
+                                    letter-spacing: 0.08em;
+                                    white-space: normal;
+                                    text-align: center;
+                                    vertical-align: middle;
+                                    font-size: 32px;
+                                    color: #fff;
+                                  }
+                                } 
+                                
+  
+                                
+                                  h3 {
+                                      line-height: 1;
+                                      font-family: "Geometric 415", sans-serif;
+                                      font-style: normal;
+                                      font-weight: 400;
+                                      text-transform: uppercase;
+                                      letter-spacing: 0.08em;
+                                      white-space: normal;
+                                      text-align: center;
+                                      vertical-align: middle;
+                                  }
+                              }
                           }
                       }
   
